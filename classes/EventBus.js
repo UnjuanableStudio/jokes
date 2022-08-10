@@ -49,6 +49,15 @@ export class EventBus {
     }
 
     /**
+     * 移除事件对象
+     * @param uuid
+     */
+    removePool(uuid) {
+        if (!this.pool.has(uuid)) return
+        delete this.pool.delete[uuid]
+    }
+
+    /**
      * 获取激活的事件对象
      * @returns {null|any}
      */
@@ -126,8 +135,8 @@ export class EventBus {
             const events = new Map()
             const reg = new RegExp(uuid + "\:")
             for (let [key, value] of emitter.all) {
-                if (key.search(reg) === 0) {
-                    events.set(key.replace(reg, ''), value)
+                if (key.search(reg) >= 0) {
+                    events.set(key, value)
                 }
             }
             return events
