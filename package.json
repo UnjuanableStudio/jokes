@@ -1,6 +1,6 @@
 {
   "name": "@unjuanable/jokes",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "JS common tools package",
   "main": "index.js",
   "scripts": {

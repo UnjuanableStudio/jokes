@@ -18,7 +18,7 @@ const options = {
  * @doc 多路事件总线，通过UUID激活事件对象
  */
 export class EventBus {
-    activatedUUID = null;
+    activeUUID = null;
 
     get pool() {
         return store
@@ -34,7 +34,7 @@ export class EventBus {
      * @returns {boolean|*|null}
      */
     fetch(uuid = null) {
-        if (uuid === null) return this.getActivated()
+        if (uuid === null) return this.getActive()
         if (!this.pool.has(uuid)) return false
         return this.pool.get(uuid)
     }
@@ -61,9 +61,9 @@ export class EventBus {
      * 获取激活的事件对象
      * @returns {null|any}
      */
-    getActivated() {
-        if (this.activatedUUID && this.pool.has(this.activatedUUID)) {
-            return this.pool.get(this.activatedUUID)
+    getActive() {
+        if (this.activeUUID && this.pool.has(this.activeUUID)) {
+            return this.pool.get(this.activeUUID)
         }
         return null
     }
@@ -73,9 +73,9 @@ export class EventBus {
      * @param uuid
      * @param callback
      */
-    setActivate(uuid, callback = null) {
+    setActive(uuid, callback = null) {
         if (this.pool.has(uuid)) {
-            this.activatedUUID = uuid
+            this.activeUUID = uuid
             callback && callback(this.pool.get(uuid))
         }
     }
@@ -88,7 +88,7 @@ export class EventBus {
      */
     _acType = (type, uuid = null) => {
         if (uuid === null) {
-            uuid = this.activatedUUID
+            uuid = this.activeUUID
         }
         return type.replace(this.reg, uuid)
     }
