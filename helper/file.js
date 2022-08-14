@@ -1,11 +1,11 @@
 /**
  * 将文件转换为二进制并下载
- * @param content 需要保存的内容
- * @param name 文件名
- * @param opt 文件保存选项
+ * @param {*} content 需要保存的内容
+ * @param {string} name 文件名
+ * @param {object} [opt] 文件保存选项
  * @returns {boolean}
  */
-export function toDownload(content, name, opt) {
+export function toDownload(content, name, opt = {}) {
     let url = URL.createObjectURL(new Blob([content], opt));
     let link = document.createElement("a");
     link.style.display = "none";
