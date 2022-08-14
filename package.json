@@ -1,11 +1,12 @@
 {
   "name": "@unjuanable/jokes",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "JS common tools package",
   "main": "index.js",
   "files": [
     "classes",
-    "helper"
+    "helper",
+    "prototype"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
