@@ -5,7 +5,7 @@ const data = new Map(); // 事件对象池
 
 /** 默认配置 **/
 const options = {
-    regularUUID: new RegExp(`\{uuid\}`) // 匹配事件对象UUID的规则
+    regularUUID: new RegExp(`\{uuid\}`)
 }
 
 /**
@@ -22,8 +22,8 @@ export class EventBus {
 
     /**
      * 创建 Event Bus
-     * @param {object} opt
-     * @param {RegExp} opt.regularUUID
+     * @param {object} opt - 配置
+     * @param {RegExp} opt.regularUUID - 匹配事件对象UUID的规则，可以是正则表达式或字符串
      */
     constructor(opt = options) {
         this.regularUUID = opt.regularUUID ?? options.regularUUID
@@ -31,32 +31,36 @@ export class EventBus {
 
     /**
      * 获取对象
-     * @param {string,null} uuid
-     * @returns {boolean|*|null}
+     * @param {string,null} uuid - 事件对象唯一ID
+     * @returns {null|*}
      */
     fetch(uuid = null) {
         if (uuid === null) return this.getActive()
-        if (!this.pool.has(uuid)) return false
+        if (!this.pool.has(uuid)) return null
         return this.pool.get(uuid)
     }
 
     /**
      * 创建事件对象
-     * @param {string} uuid
-     * @param {object} object
+     * @param {string} uuid - 事件对象唯一ID
+     * @param {object} object - 事件对象内容
+     * @returns {boolean}
      */
     createPool(uuid, object) {
         if (this.pool.has(uuid)) return false
         this.pool.set(uuid, object)
+        return true
     }
 
     /**
      * 移除事件对象
-     * @param {string} uuid
+     * @param {string} uuid - 事件对象唯一ID
+     * @returns {boolean}
      */
     removePool(uuid) {
-        if (!this.pool.has(uuid)) return
+        if (!this.pool.has(uuid)) return false
         delete this.pool.delete[uuid]
+        return true
     }
 
     /**
@@ -72,7 +76,7 @@ export class EventBus {
 
     /**
      * 设置激活对象
-     * @param {string,null} uuid
+     * @param {string,null} uuid - 事件对象唯一ID
      * @param callback
      */
     setActive(uuid, callback = null) {
@@ -84,9 +88,9 @@ export class EventBus {
 
     /**
      * 添加监听事件
-     * @param {string} type 事件类型
-     * @param {function} handler 事件方法
-     * @param {string,null} uuid 舞台ID
+     * @param {string} type - 事件类型
+     * @param {function} handler -事件回调方法
+     * @param {string,null} uuid - 事件对象唯一ID
      */
     on(type, handler, uuid = null) {
         emitter.on(eventType.call(this, type, uuid), e => {
@@ -96,9 +100,9 @@ export class EventBus {
 
     /**
      * 移除监听事件
-     * @param {string} type
-     * @param {function} handler
-     * @param {string,null} uuid
+     * @param {string} type - 事件类型
+     * @param {function} handler -事件回调方法
+     * @param {string,null} uuid - 事件对象唯一ID
      */
     off(type, handler, uuid = null) {
         emitter.off(eventType.call(this, type, uuid), handler)
@@ -106,9 +110,9 @@ export class EventBus {
 
     /**
      * 触发监听事件
-     * @param {string} type 事件类型
-     * @param {*} event 事件参数
-     * @param {string,null} uuid 舞台ID
+     * @param {string} type - 事件类型
+     * @param {*} event - 回调参数
+     * @param {string,null} uuid - 事件对象唯一ID
      */
     emit(type, event, uuid = null) {
         emitter.emit(eventType.call(this, type, uuid), event)
@@ -116,7 +120,7 @@ export class EventBus {
 
     /**
      * 遍历全部事件
-     * @param {string,null} uuid
+     * @param {string,null} uuid - 事件对象唯一ID
      * @returns
      */
     all(uuid = null) {
@@ -138,8 +142,8 @@ export class EventBus {
 /**
  * 获取当前事件
  * @private
- * @param {string} type
- * @param {string,null} uuid
+ * @param {string} type - 原始事件类型
+ * @param {string,null} uuid - 事件对象唯一ID
  * @returns {*}
  */
 function eventType(type, uuid = null) {
