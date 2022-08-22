@@ -78,12 +78,16 @@ export class EventBus {
      * 设置激活对象
      * @param {string,null} uuid - 事件对象唯一ID
      * @param callback
+     * @returns {boolean}
      */
     setActive(uuid, callback = null) {
         if (this.pool.has(uuid)) {
+            const originUUID = this.activeUUID
             this.activeUUID = uuid
-            callback && callback(this.pool.get(uuid))
+            callback && callback(originUUID)
+            return true
         }
+        return false
     }
 
     /**
