@@ -1,15 +1,14 @@
 /**
  * 将文件转换为二进制并下载
  * @param {File} file
- * @param {string} name 文件名
  * @returns {boolean}
  */
-export const toDownload = (file, name) => {
+export const toDownload = (file) => {
     let url = URL.createObjectURL(file);
     let link = document.createElement("a");
     link.style.display = "none";
     link.href = url;
-    link.setAttribute("download", name);
+    link.setAttribute("download", file.name);
     document.body.appendChild(link);
     link.click();
 
