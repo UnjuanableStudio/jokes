@@ -42,10 +42,11 @@ export const dataURLImageToFile = (dataURL, filename) => {
  * @param content 内容
  * @param {string} filename 文件名，不需要后缀
  * @param mime
+ * @param suffix 指定后缀名，为空时默认从mime中选取
  * @returns {File}
  */
-export const stringToFile = (content, filename = 'file', mime = "application/json") => {
-    const suffix = mime.split('/')[1]
+export const stringToFile = (content, filename = 'file', mime = "application/json", suffix = null) => {
+    suffix = suffix ?? mime.split('/')[1]
     const options = {
         type: mime,
         lastModified: Date.now()
