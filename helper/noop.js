@@ -2,6 +2,6 @@
  * noop function
  * @returns {undefined}
  */
-export function noop() {
+export function noop(...params) {
     return undefined
 }
